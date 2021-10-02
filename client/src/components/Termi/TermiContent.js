@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 import { observer } from "mobx-react-lite";
+import { Cmd } from "../Cmd/Cmd";
 
 export const TermiContent = observer((props) => {
   const inputRef = useRef(null);
@@ -27,10 +28,11 @@ export const TermiContent = observer((props) => {
 
   return (
     <div className="termi-content">
+      <Cmd driver={props.driver} />
       <div className="input-area">
-        <div class="pre-ip">dev@Developerss-MacBook-Pro ~ %</div>
+        <div className="pre-ip">dev@Developerss-MacBook-Pro ~ %</div>
         <form
-          style={{ width: "100%" }}
+          style={{ width: "100%", height: "100%", display: "flex" }}
           onSubmit={(e) => {
             e.preventDefault();
             props.driver.querySearch(searchInput);

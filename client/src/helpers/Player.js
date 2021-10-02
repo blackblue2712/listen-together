@@ -6,6 +6,8 @@ export class Player {
     this.player = YouTubePlayer("video-player");
     this.queue = new Queue();
 
+    this.currentSong = {};
+
     this.isPlaying = false;
   }
 
@@ -23,6 +25,7 @@ export class Player {
       return;
     }
 
+    this.currentSong = nextSong;
     this.player.loadVideoById(nextSong);
     this.player.playVideo();
 
@@ -37,16 +40,14 @@ export class Player {
     this.isPlaying = false;
 
     this.play();
+
+    return this.currentSong;
   }
 
   setQueue(playlist) {
     this.queue.set(playlist);
 
     this.play();
-  }
-
-  getCurrentSong() {
-    return this.queue[this.playlist.length - 1];
   }
 
   pushToQueue(item) {

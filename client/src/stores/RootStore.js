@@ -2,17 +2,7 @@ import { makeObservable, observable } from "mobx";
 import { searchYoutubeV3 } from "../apis/youtube";
 
 export class RootStore {
-  cmd = [
-    ">q: list queue songs",
-    ">p + <name>: add a song to queue",
-    ">s: skip a current song",
-    ">h: get help",
-    ">c: clear logs",
-    ">f: don't hear anything? try this",
-    " ",
-    "get help? use '>h'",
-    " ",
-  ];
+  cmd = [];
 
   player = null;
 
@@ -32,14 +22,37 @@ export class RootStore {
   }
 
   async querySearch(keyword) {
+    this.cmd.push(`<b>dev@Developerss-MacBook-Pro ~ %</b> ${keyword}`);
+
     switch (keyword) {
       case ">s":
-        await this.player.skip();
-        this.cmd.shift(`Current song: `);
+        const currentSong = await this.player.skip();
+        this.cmd.push(
+          `Current song: <b style="color: white">${currentSong.title}</b> was skipped.`
+        );
+        break;
+
+      case ">l":
+        this.cmd = [];
         break;
       default:
-        const resp = await searchYoutubeV3(keyword);
-        this.player.pushToQueue(resp);
+        try {
+          const now = new Date().getTime();
+
+          this.cmd.push(`Searching for <b>'${keyword}'</b> keyword ...`);
+
+          const resp = await searchYoutubeV3(keyword);
+          this.player.pushToQueue(resp);
+
+          this.cmd.push(
+            `<div style="color: #31de4b">Result success in ${
+              (new Date().getTime() - now) / 1000
+            }s<div>`
+          );
+        } catch (error) {
+          this.cmd.push(`Error: Litmit API request daily! try again next day`);
+          console.log(error);
+        }
     }
   }
 }
