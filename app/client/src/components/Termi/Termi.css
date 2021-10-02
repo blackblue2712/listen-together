@@ -1,0 +1,105 @@
+#termi {
+  overflow: hidden;
+}
+
+.termi-header {
+  height: 24px;
+  max-height: 24px;
+  width: 100%;
+
+  background: url("../../assets/images/header.png") repeat;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.termi-header__title {
+  font-size: 14px;
+  margin: 0;
+
+  color: #ccc;
+  font-weight: normal;
+  line-height: 0;
+}
+
+.header-buttons {
+  display: flex;
+  align-items: center;
+
+  height: 100%;
+}
+
+.header-buttons span {
+  display: block;
+
+  width: 12px;
+  height: 12px;
+  max-width: 12px;
+  max-height: 12px;
+
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.header-buttons__red {
+  background-color: #ff4136;
+
+  margin-right: 6px;
+}
+.header-buttons__yellow {
+  background-color: #ffd426;
+
+  margin-right: 6px;
+}
+.header-buttons__green {
+  background-color: #31de4b;
+}
+
+/* 
+	CONTENT
+*/
+
+.termi-content {
+  width: 100vw;
+  height: calc(100vh - 24px);
+
+  background: rgba(0, 0, 0, 0.9);
+
+  display: flex;
+  flex-flow: column;
+
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.input-area {
+  display: flex;
+  align-items: center;
+}
+
+.pre-ip {
+  color: #a9a9a9;
+  font-weight: 700;
+  word-break: keep-all;
+
+  font-size: 12px;
+  width: 224px;
+  min-width: 224px;
+}
+
+#serach {
+  background: transparent;
+  border: none;
+  outline: none;
+
+  width: 100%;
+  padding: 4px;
+  font-size: 12px;
+
+  caret-color: #a9a9a9;
+  color: #a9a9a9;
+}
