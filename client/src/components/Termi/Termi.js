@@ -21,6 +21,18 @@ export const Termi = observer(() => {
   useEffect(() => {
     rootStore.setPlayer(new Player(socket, rootStore.querySearch));
     rootStore.player.play();
+
+    const url = window.localStorage.getItem("CUSTOM_BACKGROUND");
+
+    if (url) {
+      document.querySelector(
+        ".termi-content"
+      ).style.backgroundImage = `url(${url})`;
+      document.querySelector(".termi-content").style.backgroundSize = `cover`;
+      document.querySelector(
+        ".termi-content"
+      ).style.backgroundBlendMode = `color`;
+    }
   }, []);
 
   useEffect(() => {
@@ -30,7 +42,7 @@ export const Termi = observer(() => {
   return (
     <div id="termi">
       <IFrame />
-      <TermiHeader />
+      <TermiHeader driver={rootStore} />
       <TermiContent driver={rootStore} />
       <TermiFooter />
     </div>

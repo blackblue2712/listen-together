@@ -6,12 +6,14 @@ export class RootStore {
   cmdHistories = [];
 
   player = null;
+  currentSong = {};
 
   constructor() {
     makeObservable(this, {
       cmd: observable,
       cmdHistories: observable,
       player: observable,
+      currentSong: observable,
     });
 
     this.querySearch = this.querySearch.bind(this);
@@ -37,6 +39,26 @@ export class RootStore {
       document.querySelector(".termi-content").scrollBy(0, 120);
     }
 
+    if (keyword.startsWith(">b")) {
+      const url = keyword.replace(">b", "").trim();
+
+      window.localStorage.setItem("CUSTOM_BACKGROUND", url);
+
+      document.querySelector(
+        ".termi-content"
+      ).style.backgroundImage = `url(${url})`;
+      document.querySelector(".termi-content").style.backgroundSize = `cover`;
+      document.querySelector(
+        ".termi-content"
+      ).style.backgroundBlendMode = `color`;
+
+      this.cmd.push(
+        `<div style="color: #31de4b">✓ Change background image to ${url} success<div>`
+      );
+
+      return;
+    }
+
     switch (keyword) {
       case ">s":
         const currentSong = await this.player.skip();
@@ -59,6 +81,26 @@ export class RootStore {
       case ">m":
         this.player.player.unMute();
         break;
+      case ">q":
+        const playlists = this.player.getQueue();
+
+        this.cmd.push("<b>➣ Get list queue ... </b>");
+
+        if (playlists.length === 0) {
+          this.cmd.push("<b>➣ Queue is empty</b>");
+          return;
+        }
+
+        playlists.forEach((song) => {
+          this.cmd.push(`
+						<div>🎶  ${song.title}</div>
+					`);
+        });
+
+        this.cmd.push(
+          `<b>🎧 Now playing: ${this.player.currentSong?.title}</b>`
+        );
+        break;
       default:
         try {
           const now = new Date().getTime();
@@ -69,7 +111,7 @@ export class RootStore {
           this.player.pushToQueue(resp);
 
           this.cmd.push(
-            `<div style="color: #31de4b">Result <b>${
+            `<div style="color: #31de4b">✓ Result <b>${
               resp.snippet.title
             }</b> success in ${(new Date().getTime() - now) / 1000}s<div>`
           );

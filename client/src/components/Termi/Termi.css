@@ -24,11 +24,15 @@
   color: #ccc;
   font-weight: normal;
   line-height: 0;
+  text-align: center;
+
+  flex: 1;
 }
 
 .header-buttons {
   display: flex;
   align-items: center;
+  flex: 1;
 
   height: 100%;
 }

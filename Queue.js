@@ -14,6 +14,10 @@ class Queue {
   push(item) {
     this.playlists.push(item);
   }
+
+  getAll() {
+    return this.playlists;
+  }
 }
 
 module.exports = Queue;

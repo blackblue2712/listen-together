@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 import { observer } from "mobx-react-lite";
 import { Cmd } from "../Cmd/Cmd";
+import { Playing } from "../Playing/Playing";
 
 export const TermiContent = observer((props) => {
   const inputRef = useRef(null);

@@ -7,8 +7,9 @@ export const TermiFooter = observer(() => {
     <div className="footer">
       {[
         ">q: list queue songs",
-        ">p + <name>: add a song to queue",
+        "<name|url>: add a song to queue",
         ">s: skip a current song",
+        ">b <url>: set custom background",
         ">h: get help",
         ">c: clear logs",
       ].map((item) => (

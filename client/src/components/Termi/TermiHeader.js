@@ -1,7 +1,9 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
+import { Playing } from "../Playing/Playing";
 import "./Termi.css";
 
-export const TermiHeader = () => {
+export const TermiHeader = observer((props) => {
   return (
     <div className="termi-header">
       <div className="header-buttons">
@@ -10,7 +12,7 @@ export const TermiHeader = () => {
         <span className="header-buttons__green"></span>
       </div>
       <h3 className="termi-header__title">dev 🍑 --- - shz --- 238x58</h3>
-      <div></div>
+      <Playing driver={props.driver} />
     </div>
   );
-};
+});

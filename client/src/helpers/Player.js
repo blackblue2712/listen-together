@@ -1,3 +1,4 @@
+import { makeObservable, observable } from "mobx";
 import YouTubePlayer from "youtube-player";
 import { pushToQueue, skipCurrentSong } from "../pkgs/socket";
 import { Queue } from "./Queue";
@@ -31,6 +32,10 @@ export class Player {
       if (event.data === 0) {
         await this.skip();
       }
+    });
+
+    makeObservable(this, {
+      currentSong: observable,
     });
   }
 
@@ -133,6 +138,10 @@ export class Player {
   getCurrentSong = () => {
     return this.currentSongId;
   };
+
+  getQueue() {
+    return this.queue.getAll();
+  }
 
   async getCurrentTime() {
     return this.player && (await this.player.getCurrentTime());

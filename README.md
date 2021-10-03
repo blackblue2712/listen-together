@@ -13,5 +13,5 @@
 
 ## Env
 
-REACT_APP_YOUTUBE_API_KEY=`your-youtube-v3-api-key`
-REACT_APP_API_URL=`localhost:3001/your-host`
+- REACT_APP_YOUTUBE_API_KEY=`your-youtube-v3-api-key`
+- REACT_APP_API_URL=`localhost:3001/your-host`

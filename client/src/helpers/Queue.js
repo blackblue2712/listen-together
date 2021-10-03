@@ -15,7 +15,7 @@ export class Queue {
     this.playlists.push(item);
   }
 
-  getQueue() {
+  getAll() {
     return this.playlists;
   }
 }

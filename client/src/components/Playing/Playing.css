@@ -1,0 +1,22 @@
+.playing {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+
+  max-width: 80%;
+}
+
+.playing-thumbnail {
+  width: 16px;
+  height: 16px;
+  object-fit: cover;
+
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+.playing-title {
+  color: #a9a9a9;
+  font-size: 11px;
+}
