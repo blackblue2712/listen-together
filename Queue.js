@@ -1,4 +1,4 @@
-export class Queue {
+class Queue {
   constructor() {
     this.playlists = [];
   }
@@ -14,8 +14,6 @@ export class Queue {
   push(item) {
     this.playlists.push(item);
   }
-
-  getQueue() {
-    return this.playlists;
-  }
 }
+
+module.exports = Queue;

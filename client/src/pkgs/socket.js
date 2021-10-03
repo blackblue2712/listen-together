@@ -1,51 +1,59 @@
-// import io from "socket.io-client";
+export const initSocket = (socket, rootStore) => {
+  socket
+    .on("connect", function () {
+      console.log("connect");
+      this.emit("init");
+    })
+    .on("first-init", () => {
+      console.log("You are the first");
+    })
+    .on("push-queue", (data) => {
+      rootStore.player.pushToQueueFromSocket(data);
+      rootStore.cmd.push(
+        `<div style="color: #31de4b">Push to queue <b>${data.title}</b> success<div>`
+      );
+      rootStore.cmd.push(
+        `Please enter <b>>m</b> to enable sounds in case you don't here anything`
+      );
+    })
+    .on("get-init-data", async () => {
+      const time = (await rootStore.player.getCurrentTime()) + 1;
+      const song = rootStore.player.currentSong;
+      const queue = rootStore.player.queue.playlists;
 
-// const socket = io("http://localhost:3001");
+      console.log("get-init-data", { queue, time, song });
 
-// export const initSocket = () => {
-//   socket
-//     .on("connect", function () {
-//       this.emit("init");
-//     })
-//     .on("disconnect", function () {})
-//     .on("init", (data) => {
-//       if (data.id) {
-//         this.setState({ id: data.id });
-//         console.log(data.id, "connected");
-//       }
-//       this.createPlayer(data);
-//     })
-//     .on("add-queue", (data) => {
-//       console.log(data);
-//       data.id && this.queue.setQueueName(data.id, data.title);
-//       this.queue.setQuee(data.queue);
-//       data.mess && this.setState({ cmd: [...this.state.cmd, data.mess] });
-//     })
-//     .on("getCurrentTime", async (id) => {
-//       console.log(
-//         "getCurrentTime",
-//         await this.queue.getCurrentTime(),
-//         this.queue.getCurrentSong(),
-//         this.queue
-//       );
-//       const time = await this.queue.getCurrentTime();
-//       const song = this.queue.getCurrentSong();
-//       socket.emit("getCurrentTime", { id, time, song });
-//     })
-//     .on("skipCurrentSong", () => {
-//       this.queue.skipCurrentSong(() => {
-//         this.setState({
-//           cmd: [...this.state.cmd, "--skiped"],
-//         });
-//       });
-//     });
-// };
+      socket.emit("get-init-data", { queue, time, song });
+    })
+    .on("put-init-data", async (data) => {
+      console.log("put-init-data", data);
 
-// export const emitMessage = (message, data) => {
-//   if (data) {
-//     return socket.emit(message, data);
-//   }
-//   socket.emit(message);
-// };
+      rootStore.player.setQueue(data.queue);
 
-// export default socket;
+      if (data.song.title) {
+        rootStore.cmd.push(
+          "Please enter <b>>m</b> to enable sounds in case you don't here anything"
+        );
+        await rootStore.player.playWithSeekTo(data.song, data.time);
+      }
+    })
+    .on("skip-current-song", async () => {
+      const currentSong = await rootStore.player.skipFromSocket();
+      rootStore.cmd.push(
+        `Current song: <b style="color: white">${currentSong.title}</b> was skipped.`
+      );
+    });
+};
+
+export const pushToQueue = (socket, data) => {
+  socket.emit("push-queue", data, () => {
+    console.log(data);
+    console.log("ack: push queue sucess!");
+  });
+};
+
+export const skipCurrentSong = async (socket) => {
+  socket.emit("skip-current-song", () => {
+    console.log("ack: skip current song sucess!");
+  });
+};

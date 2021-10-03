@@ -1,14 +1,37 @@
 import YouTubePlayer from "youtube-player";
+import { pushToQueue, skipCurrentSong } from "../pkgs/socket";
 import { Queue } from "./Queue";
 
+function indirect(js) {
+  return eval(js);
+}
+
 export class Player {
-  constructor() {
+  constructor(socket, querySearch) {
+    this.socket = socket;
+    this.querySearch = querySearch;
+
     this.player = YouTubePlayer("video-player");
+    this.player.mute();
+
+    window.player = this;
+
     this.queue = new Queue();
 
     this.currentSong = {};
 
     this.isPlaying = false;
+
+    this.player.on("stateChange", async (event) => {
+      console.log(event);
+
+      if (event.data === 2) {
+        event.target.playVideo();
+      }
+      if (event.data === 0) {
+        await this.skip();
+      }
+    });
   }
 
   play() {
@@ -17,6 +40,7 @@ export class Player {
     }
 
     const nextSong = this.queue.getFirst();
+
     this.isPlaying = true;
 
     if (!nextSong) {
@@ -26,7 +50,12 @@ export class Player {
     }
 
     this.currentSong = nextSong;
-    this.player.loadVideoById(nextSong);
+
+    this.player.loadVideoById({
+      videoId: nextSong.videoId,
+      startSeconds: 0,
+    });
+
     this.player.playVideo();
 
     // const element = document.querySelector(".termi-content");
@@ -34,20 +63,48 @@ export class Player {
     // element.style.backgroundSize = `cover`;
   }
 
+  async playWithSeekTo(song, time) {
+    if (this.isPlaying) {
+      return;
+    }
+
+    this.isPlaying = true;
+
+    if (!song) {
+      this.isPlaying = false;
+      console.log("song empty");
+      return;
+    }
+
+    console.log("---startSeconds: this.startSeconds", time);
+
+    this.currentSong = song;
+    this.player.loadVideoById({
+      videoId: song.videoId,
+      startSeconds: Math.ceil(time),
+    });
+
+    this.player.playVideo();
+  }
+
   async skip() {
+    await skipCurrentSong(this.socket, async () => {});
+
     await this.player.stopVideo();
-
     this.isPlaying = false;
-
     this.play();
-
     return this.currentSong;
   }
 
   setQueue(playlist) {
     this.queue.set(playlist);
+  }
 
+  async skipFromSocket() {
+    await this.player.stopVideo();
+    this.isPlaying = false;
     this.play();
+    return this.currentSong;
   }
 
   pushToQueue(item) {
@@ -61,9 +118,24 @@ export class Player {
         item.snippet.thumbnails.default.url,
       channelTitle: item.snippet.title,
     };
+
+    pushToQueue(this.socket, buildItem);
     this.queue.push(buildItem);
 
     this.play();
+  }
+
+  pushToQueueFromSocket(item) {
+    this.queue.push(item);
+    this.play();
+  }
+
+  getCurrentSong = () => {
+    return this.currentSongId;
+  };
+
+  async getCurrentTime() {
+    return this.player && (await this.player.getCurrentTime());
   }
 }
 

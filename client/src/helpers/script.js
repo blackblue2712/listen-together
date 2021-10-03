@@ -1,0 +1,1 @@
+window.player.querySearch(">m");
