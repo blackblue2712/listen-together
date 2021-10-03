@@ -35,8 +35,6 @@ export class RootStore {
     if (keyword !== ">m") {
       this.cmd.push(`<b>dev@Developerss-MacBook-Pro ~ %</b> ${keyword}`);
       this.cmdHistories.push(keyword);
-
-      document.querySelector(".termi-content").scrollBy(0, 120);
     }
 
     if (keyword.startsWith(">b")) {

@@ -8,7 +8,7 @@ export class Queue {
   }
 
   getFirst() {
-    return this.playlists.pop();
+    return this.playlists.unshift();
   }
 
   push(item) {
