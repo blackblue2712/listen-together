@@ -6,14 +6,12 @@ export class RootStore {
   cmdHistories = [];
 
   player = null;
-  currentSong = {};
 
   constructor() {
     makeObservable(this, {
       cmd: observable,
       cmdHistories: observable,
       player: observable,
-      currentSong: observable,
     });
 
     this.querySearch = this.querySearch.bind(this);

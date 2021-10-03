@@ -10,11 +10,12 @@ import { RootStore } from "../../stores/RootStore";
 import { observer } from "mobx-react-lite";
 import { TermiFooter } from "./TermiFooter";
 import socketIOClient from "socket.io-client";
+import { getApiUrl } from "../../helpers/appEnv";
 
 export const Termi = observer(() => {
   const [rootStore] = useState(new RootStore());
 
-  const socket = socketIOClient(process.env.REACT_APP_API_URL, {
+  const socket = socketIOClient(getApiUrl(), {
     transports: ["websocket"],
   });
 
